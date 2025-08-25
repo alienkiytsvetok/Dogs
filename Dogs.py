@@ -3,9 +3,10 @@
 
 from tkinter import*
 from PIL import Image, ImageTk
-from tkinter messagebox as mb
+from tkinter import messagebox as mb
 import requests
 from io import BytesIO
+from tkinter import ttk
 
 
 def get_dog_image():
@@ -13,7 +14,7 @@ def get_dog_image():
         response = requests.get("https://dog.ceo/api/breeds/image/random") # ответом будет ссылка в формате JSON
         response.raise_for_status() # если все хорошо статус = 200
         data = response.json()
-        return data('message') # получает адрес картинки
+        return data['message'] # получает адрес картинки
     except Exception as e:
         mb.showerror("ошибка", f"Возникла ошибка при запросе к API {e}")
         return None
@@ -33,15 +34,25 @@ def show_image():
             label.image = img # чтобы сборщик мусора не собрал картинку
         except Exception as e:
             mb.showerror("ошибка", f"Возникла ошибка при загрузке изображения{e}")
+    progress.stop()
+
+
+def prog():
+    progress['value'] = 0
+    progress.start(30)
+    window.after(3000, show_image) # 3000 милисекунд равно 3 сек.
 
 window = Tk()
 window.title("Картинки с собачками")
 window.geometry("360x420")
 
-label = label()
+label = ttk.Label()
 label.pack(pady=10)
 
-button = Button(text="Загрузить изображение", command=show_image)
+button = ttk.Button(text="Загрузить изображение", command=prog)
 button.pack(pady=10)
+
+progress = ttk.Progressbar(mode="determinate", length=300)
+progress.pack(pady=10)
 
 window.mainloop()
