@@ -3,9 +3,26 @@
 
 from tkinter import*
 from PIL import Image, ImageTk
+from tkinter messagebox as mb
 import requests
 from io import BytesIO
 
+
+
+
+def show_image():
+    image_url = get_dog_image()
+    if image_url:
+        try:
+            response = requests.get(image_url, stream=True) # получаем ссылку на картинку
+            response.raise_for_status()
+            img_data = BytesIO(response.content)
+            img = Image.open(img_data) #обрабатываем с помощью PIL и получаем картинку
+            img.thumbnail((300, 300)) # Подгоняем картинку под нужные размеры окна
+            label.config(image=img)
+            label.image = img # чтобы сборщик мусора не собрал картинку
+        except Exception as e:
+            mb.showerror("ошибка", f"Возникла ошибка {e}")
 
 window = Tk()
 window.title("Картинки с собачками")
