@@ -1,5 +1,4 @@
-# Доработка проекта в части возможности выбора размера загружаемой картинки
-# Добавление спинбоксов для ручного задания размеров картинки
+# создаем видеж ноутбук как закладки в одном окне
 
 from tkinter import*
 from PIL import Image, ImageTk
@@ -31,10 +30,12 @@ def show_image():
             img_size = (int(width_spinbox.get()), int(height_spinbox.get()))
             img.thumbnail(img_size) # Подгоняем картинку под нужные размеры окна
             img = ImageTk.PhotoImage(img)
-            new_window = Toplevel(window) # создание нового окна для отображения картинки
-            new_window.title("случайное изображение")
-            lb = ttk.Label(new_window, image=img) # новая метка, иначе изображение улетит в главное окно
-            lb.pack()
+            # new_window = Toplevel(window) # создание нового окна для отображения картинки
+            # new_window.title("случайное изображение")
+            tab = ttk.Frame(notebook)
+            notebook.add(tab, text=f"Фото №{notebook.index('end') +1}") # получаем номер картирки
+            lb = ttk.Label(tab, image=img)
+            lb.pack(padx=10, pady=10)
             lb.image = img # чтобы сборщик мусора не собрал картинку
         except Exception as e:
             mb.showerror("ошибка", f"Возникла ошибка при загрузке изображения{e}")
@@ -71,5 +72,11 @@ height_label.pack(side="left", padx=(10,0))
 height_spinbox = ttk.Spinbox(from_=200, to=500, increment=50, width=5)
 height_spinbox.pack(side="left", padx=(0,10))
 
+# Отдельное окно ноутбук с закладочкой
+top_level_window = Toplevel(window)
+top_level_window.title("Изображения собачек")
+
+notebook = ttk.Notebook(top_level_window) # создаем окно
+notebook.pack(expand=True, fill = 'both',padx=10, pady=10) # заполнить все пространство с отступами по 10
 
 window.mainloop()
