@@ -13,6 +13,9 @@ def get_dog_image():
         response = requests.get("https://dog.ceo/api/breeds/image/random") # ответом будет ссылка в формате JSON
         response.raise_for_status() # если все хорошо статус = 200
         data = response.json()
+        print(data) # проверка, что возвращает в командную строку
+        print(data['message']) # проверка, что возвращает в командную строку
+        print(data['status']) # проверка статуса в командную строку
         return data['message'] # получает адрес картинки
     except Exception as e:
         mb.showerror("ошибка", f"Возникла ошибка при запросе к API {e}")
@@ -65,12 +68,14 @@ width_label = ttk.Label(text="ширина:")
 width_label.pack(side="left", padx=(10,0)) # метка будет прижата влево, padx означает отступ 10 от левого края
 width_spinbox = ttk.Spinbox(from_=200, to=500, increment=50, width=5) # размеры будут изменять в диапазоне 200-500 с шагом 50
 width_spinbox.pack(side="left", padx=(0,10))
+width_spinbox.set(300) # устанавливаем значение ширины по умолчанию.
 
 # создаем параметры высоты спинбокса
 height_label = ttk.Label(text="высота:")
 height_label.pack(side="left", padx=(10,0))
 height_spinbox = ttk.Spinbox(from_=200, to=500, increment=50, width=5)
 height_spinbox.pack(side="left", padx=(0,10))
+height_spinbox.set(300) # устанавливаем значение высоты по умолчанию.
 
 # Отдельное окно ноутбук с закладочкой
 top_level_window = Toplevel(window)
